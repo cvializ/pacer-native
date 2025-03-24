@@ -1,8 +1,20 @@
 import { useEffect, useState } from "react";
 import { Button, Text, View, StyleSheet } from "react-native";
-import { setAValue, setNValue, start, stop } from './morse';
-import { requestPermission, averageSpeed$ } from './geolocation';
+import { setAValue, setNValue, start, stop } from '../../utils/morse';
+import { requestPermission, averageSpeed$ } from '../../utils/geolocation';
 import { map } from "rxjs";
+
+const timeFormatter = new Intl.DateTimeFormat('en-US', {
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: false     // setting 24 hour format 
+});
+const formatTime = (minutes, seconds) => {
+  const date = new Date('2020-01-01T00:00:00Z');
+  date.setMinutes(minutes);
+  date.setSeconds(seconds);
+  return timeFormatter.format(date);
+};
 
 const mphFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
@@ -11,19 +23,20 @@ const mphFormatter = new Intl.NumberFormat("en-US", {
 });
 const formatMph = (value) => mphFormatter.format(value)
 
+const formatMinutesPerMile = (value) => {
+  if (value === 0) {
+    return '00:00';
+  }
+  const minutesPerMile = (60 / value);
+  const minutes = Math.floor(minutesPerMile);
+  const decimal = minutesPerMile - minutes;
+  const seconds = decimal * 60;
+  return formatTime(minutes, seconds);
+}
+
 const TARGET_SPEED = 8;
 
 const SPEED_RANGE = 3; // 3 above, 3 below
-
-
-// const textStyle = {
-//   textAlign: center;
-//   fontSize: min(15vw, 10vh);
-//   fontFamily: "Menlo", monospace;
-
-//   fontColor: white;
-//   textShadow: rgb(40, 67, 130) 4px 3px 1px;
-// }
 
 const styles = StyleSheet.create({
   speed: {
@@ -67,8 +80,6 @@ const toStatusColor = (normalizedValue) => {
 
   return 'red';
 }
-
-
 
 export default function Index() {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -152,6 +163,7 @@ export default function Index() {
       }}
     >
       <Text style={styles.speed}>{formatMph(speed.toFixed(1))}</Text>
+      <Text style={styles.speed}>{formatMinutesPerMile(speed)}</Text>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Button
           onPress={onPressMinus}
