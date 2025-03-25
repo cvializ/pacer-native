@@ -5,7 +5,7 @@ const fromArray = (arr) => from(arr);
 
 const BEAT_TIME_SECONDS = .35294 / 2; // 170bpm * 2
 
-const REPEAT_COUNT = 1000; // gives 1 hour playtime
+const REPEAT_COUNT = 250; // gives .25 hour playtime
 
 const a$ = fromArray('X XX  X XX  X XX  '.repeat(REPEAT_COUNT).split(''));
 const n$ = fromArray(' X  XX X  XX X  XX'.repeat(REPEAT_COUNT).split(''));

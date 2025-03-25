@@ -134,10 +134,10 @@ export default function Index() {
   },[targetSpeed]);
 
   const onPressMinus = () => {
-    setTargetSpeed(value => value - 1);
+    setTargetSpeed(value => value - .1);
   };
   const onPressPlus = () => {
-    setTargetSpeed(value => value + 1);
+    setTargetSpeed(value => value + .1);
   };
   const onPressPause = () => {
     setIsPlaying(value => {
@@ -171,7 +171,7 @@ export default function Index() {
           color="#000000"
           accessibilityLabel="Decrease by one"
         />
-        <Text style={styles.targetSpeed}>{formatMph(targetSpeed)}</Text>
+        <Text style={styles.targetSpeed}>{targetSpeed}mph</Text>
         <Button
           onPress={onPressPlus}
           title="Run Faster"
